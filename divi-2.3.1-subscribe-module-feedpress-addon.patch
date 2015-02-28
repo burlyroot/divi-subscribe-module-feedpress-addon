@@ -1,6 +1,6 @@
 diff -rupN Divi/et-pagebuilder/et-pagebuilder.php Divi-2.3.1-subscribe-module-feedpress-addon/et-pagebuilder/et-pagebuilder.php
 --- Divi/et-pagebuilder/et-pagebuilder.php	2015-02-19 15:56:52.000000000 -0500
-+++ Divi-2.3.1-subscribe-module-feedpress-addon/et-pagebuilder/et-pagebuilder.php	2015-02-28 06:01:56.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/et-pagebuilder/et-pagebuilder.php	2015-02-28 16:04:25.000000000 -0500
 @@ -4942,7 +4942,14 @@ esc_html_e( 'Service Provider', 'Divi' )
  echo <<<END
  : </label>
@@ -69,7 +69,7 @@ diff -rupN Divi/et-pagebuilder/et-pagebuilder.php Divi-2.3.1-subscribe-module-fe
  			</div> <!-- .et-pb-option -->
 diff -rupN Divi/functions.php Divi-2.3.1-subscribe-module-feedpress-addon/functions.php
 --- Divi/functions.php	2015-02-19 15:56:52.000000000 -0500
-+++ Divi-2.3.1-subscribe-module-feedpress-addon/functions.php	2015-02-28 06:01:56.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/functions.php	2015-02-28 16:39:44.000000000 -0500
 @@ -3492,6 +3492,14 @@ function et_pb_signup( $atts, $content =
  			'use_background_color' => 'on',
  			'provider' => 'mailchimp',
@@ -99,7 +99,7 @@ diff -rupN Divi/functions.php Divi-2.3.1-subscribe-module-feedpress-addon/functi
 +		case 'feedpress':
 +            $form = sprintf('
 +                <div class="et_pb_newsletter_form et_pb_feedpress_form">
-+                    <form action="https://feed.press/e/mailverify" method="post" target="popupwindow" onsubmit="window.open(\'https://feed.press/e/mailverify?feed_id=<INSERT-FEED-NAME>\', \'popupwindow\', \'scrollbars=yes, width=500,height=520\'); return true">
++                    <form action="https://feed.press/e/mailverify" method="post" target="popupwindow" onsubmit="window.open(\'https://feed.press/e/mailverify?feed_id=%5$s\', \'popupwindow\', \'scrollbars=yes, width=500,height=520\'); return true">
 +                        <p>
 +                            <input id="email" class="input" type="text" value="" name="email" placeholder="Email Address">
 +                        </p>
@@ -122,9 +122,16 @@ diff -rupN Divi/functions.php Divi-2.3.1-subscribe-module-feedpress-addon/functi
  		case 'aweber' :
  			$firstname = __( 'Name', 'Divi' );
  
+@@ -5015,4 +5053,4 @@ function et_pb_map_pin( $atts, $content 
+ 	);
+ 
+ 	return $output;
+-}
+\ No newline at end of file
++}
 diff -rupN Divi/js/custom.js Divi-2.3.1-subscribe-module-feedpress-addon/js/custom.js
 --- Divi/js/custom.js	2015-02-19 15:56:52.000000000 -0500
-+++ Divi-2.3.1-subscribe-module-feedpress-addon/js/custom.js	2015-02-28 06:07:44.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/js/custom.js	2015-02-28 16:04:25.000000000 -0500
 @@ -2339,6 +2339,10 @@
  				return;
  			}

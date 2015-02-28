@@ -10,7 +10,7 @@ Unzip Divi, and place the patch in the same directory as Divi.
 Patch Divi.
 
 ```
-patch -p0 divi-2.3.1-subscribe-module-feedpress-addon.patch
+patch -p0 < divi-2.3.1-subscribe-module-feedpress-addon.patch
 ```
 
 If you have issues with the patch failing, please let me know. 

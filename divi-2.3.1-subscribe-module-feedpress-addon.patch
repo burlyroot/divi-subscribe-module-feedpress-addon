@@ -1,0 +1,145 @@
+diff -rupN Divi/et-pagebuilder/et-pagebuilder.php Divi-2.3.1-subscribe-module-feedpress-addon/et-pagebuilder/et-pagebuilder.php
+--- Divi/et-pagebuilder/et-pagebuilder.php	2015-02-19 15:56:52.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/et-pagebuilder/et-pagebuilder.php	2015-02-28 06:01:56.000000000 -0500
+@@ -4942,7 +4942,14 @@ esc_html_e( 'Service Provider', 'Divi' )
+ echo <<<END
+ : </label>
+ 				<div class="et-pb-option-container">
+-					<select name="et_pb_provider" id="et_pb_provider" class="et-pb-affects" data-affects="#et_pb_feedburner_uri, #et_pb_mailchimp_list, #et_pb_aweber_list">
++					<!-- 
++						BEGIN CODE MODIFICATION
++						Divi Subscribe Module Feedpress Addon
++						Author: Dereck Martin <dmartin@burlyroot.com>
++						Website: http://www.burlyroot.com
++					-->
++					<select name="et_pb_provider" id="et_pb_provider" class="et-pb-affects" data-affects="#et_pb_feedpress_uri, #et_pb_feedburner_uri, #et_pb_mailchimp_list, #et_pb_aweber_list">
++					<!-- END CODE MODIFICATION -->
+ 						<option value="mailchimp"<%= typeof( et_pb_provider ) !== 'undefined' && 'mailchimp' === et_pb_provider ?  ' selected="selected"' : '' %>>
+ END;
+ esc_html_e( 'MailChimp', 'Divi' );
+@@ -4958,12 +4965,49 @@ END;
+ esc_html_e( 'Aweber', 'Divi' );
+ echo <<<END
+ </option>
++						<!-- 
++							BEGIN CUSTOM CODE
++							Divi Subscribe Module Feedpress Addon
++							Author: Dereck Martin <dmartin@burlyroot.com>
++							Website: http://www.burlyroot.com
++						-->
++						<option value="feedpress"<%= typeof( et_pb_provider ) !== 'undefined' && 'feedpress' === et_pb_provider ?  ' selected="selected"' : '' %>>
++END;
++esc_html_e( 'Feedpress', 'Divi');
++echo <<<END
++</option>
++<!-- END CUSTOM CODE -->
++
+ 					</select>
+ 
+ 					<p class="description">
+ END;
+ esc_html_e( 'Here you can choose a service provider.', 'Divi' );
+ echo <<<END
++<!-- 
++	BEGIN CUSTOM CODE
++	Divi Subscribe Module Feedpress Addon
++	Author: Dereck Martin <dmartin@burlyroot.com>
++	Website: http://www.burlyroot.com
++-->
++</p>
++				</div> <!-- .et-pb-option-container -->
++			</div> <!-- .et-pb-option -->
++
++			<div class="et-pb-option et-pb-depends" data-depends_show_if="feedpress">
++				<label for="et_pb_feedpress_uri">
++END;
++esc_html_e( 'Feed Title', 'Divi' );
++echo <<<END
++: </label>
++				<div class="et-pb-option-container">
++					<input id="et_pb_feedpress_uri" type="text" class="regular-text" value="<%= typeof( et_pb_feedpress_uri ) !== 'undefined' ?  et_pb_feedpress_uri : '' %>" />
++
++					<p class="description">
++END;
++_e( sprintf( 'Enter <a href="%1$s" target="_blank">Feed Title</a>.', esc_url( 'https://feedpress.me/feed-name' ) ), 'Divi' );
++echo <<<END
++<!-- END CUSTOM CODE -->
+ </p>
+ 				</div> <!-- .et-pb-option-container -->
+ 			</div> <!-- .et-pb-option -->
+diff -rupN Divi/functions.php Divi-2.3.1-subscribe-module-feedpress-addon/functions.php
+--- Divi/functions.php	2015-02-19 15:56:52.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/functions.php	2015-02-28 06:01:56.000000000 -0500
+@@ -3492,6 +3492,14 @@ function et_pb_signup( $atts, $content =
+ 			'use_background_color' => 'on',
+ 			'provider' => 'mailchimp',
+ 			'feedburner_uri' => '',
++
++			/**
++			 * Divi Subscribe Module Feedpress Addon 
++			 * Author: Dereck Martin
++			 * Website: http://www.burlyroot.com
++			 * Reference: https://www.elegantthemes.com/forum/viewtopic.php?f=24&t=378458
++			 */
++			'feedpress_uri' => '',
+ 		), $atts
+ 	) );
+ 
+@@ -3561,6 +3569,36 @@ function et_pb_signup( $atts, $content =
+ 			);
+ 
+ 			break;
++
++		/**
++		 * Divi Subscribe Module Feedpress Addon
++		 * Author: Dereck Martin <dmartin@burlyroot.com>
++		 * Website: http://www.burlyroot.com
++		 * Reference: https://www.elegantthemes.com/forum/viewtopic.php?f=24&t=378458
++		 */
++		case 'feedpress':
++            $form = sprintf('
++                <div class="et_pb_newsletter_form et_pb_feedpress_form">
++                    <form action="https://feed.press/e/mailverify" method="post" target="popupwindow" onsubmit="window.open(\'https://feed.press/e/mailverify?feed_id=<INSERT-FEED-NAME>\', \'popupwindow\', \'scrollbars=yes, width=500,height=520\'); return true">
++                        <p>
++                            <input id="email" class="input" type="text" value="" name="email" placeholder="Email Address">
++                        </p>
++                        <p><button class="et_pb_newsletter_button" type="submit">%1$s</button></p>
++                        <input type="hidden" value="%4$s" name="feed_id" />
++						<input type="hidden" value="%4$s" name="uri" />
++                        <input type="hidden" name="loc" value="%5$s" />
++                    </form>
++                </div>',
++            esc_html( $button_text ),
++			esc_html( $email_address ),
++			esc_attr( $email_address ),
++            esc_attr( $feedpress_uri ),
++			esc_attr( get_locale() )
++            );
++
++            break;
++        /** END Module Addon **/
++
+ 		case 'aweber' :
+ 			$firstname = __( 'Name', 'Divi' );
+ 
+diff -rupN Divi/js/custom.js Divi-2.3.1-subscribe-module-feedpress-addon/js/custom.js
+--- Divi/js/custom.js	2015-02-19 15:56:52.000000000 -0500
++++ Divi-2.3.1-subscribe-module-feedpress-addon/js/custom.js	2015-02-28 06:07:44.000000000 -0500
+@@ -2339,6 +2339,10 @@
+ 				return;
+ 			}
+ 
++			if ( $(this).closest( '.et_pb_login_form' ).length || $(this).closest('.et_pb_feedpress_form' ). length ) {
++                		return;
++            		}
++
+ 			event.preventDefault();
+ 
+ 			var $newsletter_container = $(this).closest( '.et_pb_newsletter' ),
+@@ -2736,4 +2740,4 @@
+ 		}
+ 
+ 	} );
+-})(jQuery)
+\ No newline at end of file
++})(jQuery)

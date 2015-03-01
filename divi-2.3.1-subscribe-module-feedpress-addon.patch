@@ -99,7 +99,7 @@ diff -rupN Divi/functions.php Divi-2.3.1-subscribe-module-feedpress-addon/functi
 +		case 'feedpress':
 +            $form = sprintf('
 +                <div class="et_pb_newsletter_form et_pb_feedpress_form">
-+                    <form action="https://feed.press/e/mailverify" method="post" target="popupwindow" onsubmit="window.open(\'https://feed.press/e/mailverify?feed_id=%5$s\', \'popupwindow\', \'scrollbars=yes, width=500,height=520\'); return true">
++                    <form action="https://feed.press/e/mailverify" method="post" target="popupwindow" onsubmit="window.open(\'https://feed.press/e/mailverify?feed_id=%4$s\', \'popupwindow\', \'scrollbars=yes, width=500,height=520\'); return true">
 +                        <p>
 +                            <input id="email" class="input" type="text" value="" name="email" placeholder="Email Address">
 +                        </p>
